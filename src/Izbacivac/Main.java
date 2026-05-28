@@ -19,15 +19,12 @@ public class Main {
              System.out.println(e.getMessage());
         }
 
-
-
     }
 
-    public static String provjeriDob(int dob) throws IllegalArgumentException {
+    public static void provjeriDob(int dob) throws IllegalArgumentException {
          if (dob < 18) {
             throw new IllegalArgumentException("Ulaz zabranjen. Premlad za ulazak.");
          }
          System.out.println("Dobrodošli u klub!");
-         return "Dobrodošli u klub!";
     }
 }
