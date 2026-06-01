@@ -1,54 +1,69 @@
 package faktorijel;
 
+import java.math.BigInteger;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Main {
+
     public static void main(String[] args) {
+        Scanner unos = new Scanner(System.in);
 
-         int broj;
+        int broj = -1;
+        boolean validanUnos = false;
 
-         Scanner unos = new Scanner(System.in);
-         System.out.print("Unesite neki broj: ");
-         broj = unos.nextInt();
+        while (!validanUnos) {
+            try {
+                System.out.print("Unesite neki broj: ");
 
-         try {
-             faktorijel(broj);
-         } catch(InputMismatchException e) {
-             System.err.println(e.getMessage());
-         } catch  (IllegalArgumentException e) {
-             System.out.println(e.getMessage());
-         } catch (Exception e) {
-             System.err.println("Nepoznata iznimka!" );
-         }
 
-         unos.close();
+                if (!unos.hasNextInt()) {
+                    String pogresnUnos = unos.nextLine();
+                    throw new InputMismatchException("Greška: '" + pogresnUnos.trim() + "' nije broj! Pokušajte ponovno.");
+                }
+
+                broj = unos.nextInt();
+                unos.nextLine();
+                validanUnos = true;
+
+            } catch (InputMismatchException e) {
+                System.err.println(e.getMessage());
+            } catch (Exception e) {
+                System.err.println("Nepoznata iznimka!");
+            }
+        }
+
+        try {
+            BigInteger rezultat = faktorijel(broj);
+        } catch (IllegalArgumentException e) {
+            System.err.println(e.getMessage());
+        } catch (Exception e) {
+            System.err.println("Nepoznata iznimka!");
+        }
+
+        unos.close();
     }
 
-    public static int faktorijel(int n) {
-
+    public static BigInteger faktorijel(int n) throws IllegalArgumentException {
         provjeriUnos(n);
-        int faktorijel = 1;
+        BigInteger faktorijel = BigInteger.valueOf(1);
+
+        if(n == 0) {
+            faktorijel = BigInteger.valueOf(0);
+        }
 
         for (int i = 1; i <= n; i++) {
-            faktorijel *= i;
+            faktorijel = faktorijel.multiply(BigInteger.valueOf(i));
         }
         System.out.println("Faktorijel broja " + n + " je " + faktorijel + ".");
         return faktorijel;
     }
 
 
-
-    public static void provjeriUnos(int broj) throws InputMismatchException, IllegalArgumentException {
-
-           if(broj < 1) {
-                throw new IllegalArgumentException("Greška: Unesen je broj manji od 1. ");
-           } else if(!(broj == (int)broj)) {
-               throw new InputMismatchException("Greška: Nije unesen cijeli broj!!");
-           }
-
-           System.out.print("Unos je veći od 0. ");
+    public static void provjeriUnos(int broj) throws IllegalArgumentException, InputMismatchException {
+        if (broj < 0) {
+            throw new IllegalArgumentException("Greška: Faktorijel nije definiran za negativne brojeve i nulu!");
+        }
+        System.out.println("Unos je validan. Broj: " + broj);
     }
-
-
-}
+    }
